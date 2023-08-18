@@ -4,48 +4,34 @@
 # and/or modify it under the terms of the GNU General Public
 # License (version 2) as published by the FSF - Free Software
 # Foundation.
----
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: wazuh-indexer
+  name: wazuh-manager-worker
   namespace: wazuh
 spec:
+  replicas: 1
   template:
     spec:
       containers:
-        - name: wazuh-indexer
+        - name: wazuh-manager
           resources:
             requests:
-              cpu: 500m
+              cpu: 1
               memory: 1Gi
             limits:
-              cpu: 1
+              cpu: 2
               memory: 2Gi
   volumeClaimTemplates:
     - metadata:
-        name: wazuh-indexer
-        namespace: indexer-cluster
+        name: wazuh-manager-worker
+        namespace: wazuh
       spec:
         accessModes:
           - ReadWriteOnce
         storageClassName: wazuh-storage
         resources:
           requests:
-            storage: 10Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: indexer
-  namespace: wazuh
-  labels:
-    app: wazuh-indexer
-spec:
-  type: ClusterIP
-  selector:
-    app: wazuh-indexer
-  ports:
-    - name: indexer-rest
-      port: 9200
-      targetPort: 9200
+            storage: 50Gi
+            

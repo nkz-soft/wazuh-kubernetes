@@ -6,30 +6,19 @@
 # Foundation.
 
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: wazuh-manager-master
+  name: wazuh-dashboard
   namespace: wazuh
 spec:
   template:
     spec:
       containers:
-        - name: wazuh-manager
+        - name: wazuh-dashboard
           resources:
             requests:
-              cpu: 1
-              memory: 1Gi
+              cpu: 200m
+              memory: 512Mi
             limits:
-              cpu: 2
+              cpu: 400m
               memory: 2Gi
-  volumeClaimTemplates:
-    - metadata:
-        name: wazuh-manager-master
-        namespace: wazuh
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        storageClassName: wazuh-storage
-        resources:
-          requests:
-            storage: 50Gi

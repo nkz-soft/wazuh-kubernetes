@@ -8,45 +8,44 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: wazuh-manager-worker
+  name: wazuh-indexer
   namespace: wazuh
 spec:
   template:
     spec:
       containers:
-        - name: wazuh-manager
+        - name: wazuh-indexer
           resources:
             requests:
-              cpu: 1
+              cpu: 500m
               memory: 1Gi
             limits:
-              cpu: 2
+              cpu: 1
               memory: 2Gi
   volumeClaimTemplates:
     - metadata:
-        name: wazuh-manager-worker
-        namespace: wazuh
+        name: wazuh-indexer
+        namespace: indexer-cluster
       spec:
         accessModes:
           - ReadWriteOnce
         storageClassName: wazuh-storage
         resources:
           requests:
-            storage: 50Gi
----            
+            storage: 10Gi
+---
 apiVersion: v1
 kind: Service
 metadata:
-  name: wazuh-workers
+  name: indexer
   namespace: wazuh
   labels:
-    app: wazuh-manager
+    app: wazuh-indexer
 spec:
   type: ClusterIP
   selector:
-    app: wazuh-manager
-    node-type: worker
+    app: wazuh-indexer
   ports:
-    - name: agents-events
-      port: 1514
-      targetPort: 1514
+    - name: indexer-rest
+      port: 9200
+      targetPort: 9200

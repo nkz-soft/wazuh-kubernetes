@@ -4,11 +4,11 @@
 # and/or modify it under the terms of the GNU General Public
 # License (version 2) as published by the FSF - Free Software
 # Foundation.
----
+
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: wazuh-manager-worker
+  name: wazuh-manager-master
   namespace: wazuh
 spec:
   template:
@@ -24,7 +24,7 @@ spec:
               memory: 2Gi
   volumeClaimTemplates:
     - metadata:
-        name: wazuh-manager-worker
+        name: wazuh-manager-master
         namespace: wazuh
       spec:
         accessModes:
@@ -33,20 +33,3 @@ spec:
         resources:
           requests:
             storage: 50Gi
----            
-apiVersion: v1
-kind: Service
-metadata:
-  name: wazuh-workers
-  namespace: wazuh
-  labels:
-    app: wazuh-manager
-spec:
-  type: ClusterIP
-  selector:
-    app: wazuh-manager
-    node-type: worker
-  ports:
-    - name: agents-events
-      port: 1514
-      targetPort: 1514

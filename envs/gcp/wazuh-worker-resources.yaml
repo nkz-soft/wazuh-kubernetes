@@ -42,7 +42,7 @@ metadata:
   labels:
     app: wazuh-manager
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: wazuh-manager
     node-type: worker

@@ -1,17 +1,17 @@
 ﻿apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: wazuh-dashboard-ingress
+  name: wazuh-api-ingress
   namespace: wazuh
 spec:
   rules:
-    - host: "wazuh-dashboard.local"
+    - host: "wazuh-api.local"
       http:
         paths:
           - pathType: Prefix
             path: /
             backend:
               service:
-                name: dashboard
+                name: wazuh
                 port:
-                  number: 81
+                  number: 55000
